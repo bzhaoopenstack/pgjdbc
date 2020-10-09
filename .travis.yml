@@ -244,6 +244,8 @@ matrix:
       arch: amd64
     - os: linux
       arch: arm64-graviton2
+    - os: linux
+      arch: arm64
 
 # Deploy snapshots to Maven Central
 after_success:
