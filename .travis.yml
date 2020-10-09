@@ -2,8 +2,8 @@ sudo: false
 language: java
 dist: trusty
 arch: 
-  - amd64
   - arm64-graviton2
+  - amd64
 
 branches:
   except:
