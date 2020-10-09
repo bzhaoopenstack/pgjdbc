@@ -240,9 +240,10 @@ matrix:
         - PG_VERSION=9.4
         - NO_WAFFLE_NO_OSGI=Y
         - JDK=8
-    - arch: 
-        - amd64
-        - arm64-graviton2
+    - os: linux
+      arch: amd64
+    - os: linux
+      arch: arm64-graviton2
 
 # Deploy snapshots to Maven Central
 after_success:
