@@ -95,18 +95,12 @@ matrix:
   fast_finish: true
   include:
     - stage: test
-      arch: 
-        - amd64
-        - arm64-graviton2
       env:
         - FEDORA_CI=Y
       services:
         - docker
       if: type != pull_request
     - jdk: openjdk-ea
-      arch: 
-        - amd64
-        - arm64-graviton2
       sudo: required
       addons:
         postgresql: "10"
@@ -116,9 +110,6 @@ matrix:
         - TZ=America/New_York # flips between −05:00 and −04:00
         - BUILD_SCAN=Y
     - jdk: openjdk-ea
-      arch: 
-        - amd64
-        - arm64-graviton2
       sudo: required
       addons:
         postgresql: "11"
@@ -129,9 +120,6 @@ matrix:
         - NO_HSTORE=Y
         - PLPGSQL_EXTENSION=Y
     - jdk: oraclejdk14
-      arch: 
-        - amd64
-        - arm64-graviton2
       sudo: required
       addons:
         postgresql: "11"
@@ -143,9 +131,6 @@ matrix:
         - PLPGSQL_EXTENSION=Y
         - JDK=14
     - jdk: oraclejdk8
-      arch: 
-        - amd64
-        - arm64-graviton2
       sudo: required
       addons:
         postgresql: "11"
@@ -158,9 +143,6 @@ matrix:
         - JDK=8
         - BUILD_SCAN=Y
     - jdk: oraclejdk11
-      arch: 
-        - amd64
-        - arm64-graviton2
       sudo: required
       addons:
         postgresql: "10"
@@ -170,9 +152,6 @@ matrix:
         - TZ=America/New_York # flips between −05:00 and −04:00
         - SLOW_TESTS=Y
     - jdk: oraclejdk14
-      arch: 
-        - amd64
-        - arm64-graviton2
       addons:
         postgresql: "9.6"
       env:
@@ -180,9 +159,6 @@ matrix:
         - JDK=14
         - TZ=America/New_York # flips between −05:00 and −04:00
     - jdk: oraclejdk8
-      arch: 
-        - amd64
-        - arm64-graviton2
       sudo: required
       env:
         - PG_VERSION=HEAD
@@ -194,9 +170,6 @@ matrix:
         - JDK=8
         - SLOW_TESTS=Y
     - jdk: oraclejdk8
-      arch: 
-        - amd64
-        - arm64-graviton2
       sudo: required
       addons:
         postgresql: "9.6"
@@ -209,9 +182,6 @@ matrix:
         - MCENTRAL=Y
         - JDOC=Y
     - jdk: oraclejdk8
-      arch: 
-        - amd64
-        - arm64-graviton2
       sudo: required
       addons:
         postgresql: "9.5"
@@ -221,9 +191,6 @@ matrix:
         - REPLICATION=Y
         - JDK=8
     - jdk: oraclejdk8
-      arch: 
-        - amd64
-        - arm64-graviton2
       addons:
         postgresql: "9.4"
       env:
@@ -233,9 +200,6 @@ matrix:
         - TZ=Europe/Moscow # +03:00, no DST
         - JDK=8
     - jdk: oraclejdk8
-      arch: 
-        - amd64
-        - arm64-graviton2
       sudo: required
       addons:
         postgresql: "10"
@@ -245,9 +209,6 @@ matrix:
         - COVERAGE=Y
         - JDK=8
     - jdk: oraclejdk8
-      arch: 
-        - amd64
-        - arm64-graviton2
       sudo: required
       env:
         - PG_VERSION=8.4
@@ -256,9 +217,6 @@ matrix:
         - NO_HSTORE=Y
         - CREATE_PLPGSQL=Y
     - jdk: oraclejdk8
-      arch: 
-        - amd64
-        - arm64-graviton2
       addons:
         postgresql: "9.6"
       env:
@@ -268,9 +226,6 @@ matrix:
         - TEST_CLIENTS=Y
         - JDK=8
     - jdk: oraclejdk8
-      arch: 
-        - amd64
-        - arm64-graviton2
       addons:
         postgresql: "9.3"
       env:
@@ -279,15 +234,15 @@ matrix:
         - COVERAGE=Y
         - JDK=8
     - jdk: oraclejdk8
-      arch: 
-        - amd64
-        - arm64-graviton2
       addons:
         postgresql: "9.4"
       env:
         - PG_VERSION=9.4
         - NO_WAFFLE_NO_OSGI=Y
         - JDK=8
+    - arch: 
+        - amd64
+        - arm64-graviton2
 
 # Deploy snapshots to Maven Central
 after_success:
