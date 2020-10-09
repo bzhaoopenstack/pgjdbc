@@ -2,8 +2,8 @@ sudo: false
 language: java
 dist: trusty
 arch: 
-  - arm64-graviton2
   - amd64
+  - arm64-graviton2
 
 branches:
   except:
@@ -95,6 +95,9 @@ cache:
     - $HOME/.sbt/boot/
 
 matrix:
+  arch:
+    - amd64
+    - arm64-graviton2
   fast_finish: true
   include:
     - stage: test
