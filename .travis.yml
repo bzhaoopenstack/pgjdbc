@@ -2,6 +2,15 @@ sudo: false
 language: java
 dist: trusty
 
+jobs:
+  include:
+    - os: linux
+      arch: amd64
+    - os: linux
+      arch: arm64-graviton2
+    - os: linux
+      arch: arm64
+
 branches:
   except:
     - /^tmp\/.*/
@@ -240,12 +249,7 @@ matrix:
         - PG_VERSION=9.4
         - NO_WAFFLE_NO_OSGI=Y
         - JDK=8
-    - os: linux
-      arch: amd64
-    - os: linux
-      arch: arm64-graviton2
-    - os: linux
-      arch: arm64
+
 
 # Deploy snapshots to Maven Central
 after_success:
