@@ -33,7 +33,9 @@ before_script:
   - test "x$XA" == 'x' || ./.travis/travis_configure_xa.sh
   - test "x$REPLICATION" == 'x' || ./.travis/travis_configure_replication.sh
   - test "x$SSLTEST" == 'x' || ./.travis/travis_configure_ssl.sh
-  - ./.travis/travis_start_postgres.sh
+  - bash -x ./.travis/travis_start_postgres.sh
+  - ifconfig
+  - ps -ef | grep postgre
   - sleep 30
   - test "x$PG_VERSION" != 'xHEAD' || psql -U postgres -c "set password_encryption='scram-sha-256'; create user test with password 'test';"
   - test "x$PG_VERSION" = 'xHEAD' || psql -U postgres -c "create user test with password 'test';"
