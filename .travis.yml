@@ -1,7 +1,6 @@
 sudo: false
 language: java
 dist: trusty
-arch: arm64
 
 branches:
   except:
@@ -229,6 +228,200 @@ matrix:
         - COVERAGE=Y
         - JDK=8
     - jdk: oraclejdk8
+      addons:
+        postgresql: "9.4"
+      env:
+        - PG_VERSION=9.4
+        - NO_WAFFLE_NO_OSGI=Y
+        - JDK=8
+    - stage: test
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      env:
+        - FEDORA_CI=Y
+      services:
+        - docker
+      if: type != pull_request
+    - jdk: openjdk-ea
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      sudo: required
+      addons:
+        postgresql: "10"
+      env:
+        - PG_VERSION=10
+        - JDK=12
+        - TZ=America/New_York # flips between −05:00 and −04:00
+        - BUILD_SCAN=Y
+    - jdk: openjdk-ea
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      sudo: required
+      addons:
+        postgresql: "11"
+      env:
+        - PG_VERSION=11
+        - XA=true
+        - COVERAGE=Y
+        - NO_HSTORE=Y
+        - PLPGSQL_EXTENSION=Y
+    - jdk: oraclejdk14
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      sudo: required
+      addons:
+        postgresql: "11"
+      env:
+        - PG_VERSION=11
+        - XA=true
+        - COVERAGE=Y
+        - NO_HSTORE=Y
+        - PLPGSQL_EXTENSION=Y
+        - JDK=14
+    - jdk: oraclejdk8
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      sudo: required
+      addons:
+        postgresql: "11"
+      env:
+        - PG_VERSION=11
+        - XA=true
+        - COVERAGE=Y
+        - NO_HSTORE=Y
+        - PLPGSQL_EXTENSION=Y
+        - JDK=8
+        - BUILD_SCAN=Y
+    - jdk: oraclejdk11
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      sudo: required
+      addons:
+        postgresql: "10"
+      env:
+        - PG_VERSION=10
+        - JDK=11
+        - TZ=America/New_York # flips between −05:00 and −04:00
+        - SLOW_TESTS=Y
+    - jdk: oraclejdk14
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      addons:
+        postgresql: "9.6"
+      env:
+        - PG_VERSION=9.6
+        - JDK=14
+        - TZ=America/New_York # flips between −05:00 and −04:00
+    - jdk: oraclejdk8
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      sudo: required
+      env:
+        - PG_VERSION=HEAD
+        - XA=true
+        - REPLICATION=Y
+        - COVERAGE=Y
+        - TEST_CLIENTS=Y
+        - TZ=Pacific/Chatham # flips between +12:45 and +13:45
+        - JDK=8
+        - SLOW_TESTS=Y
+    - jdk: oraclejdk8
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      sudo: required
+      addons:
+        postgresql: "9.6"
+      env:
+        - PG_VERSION=9.6
+        - ZULU_JDK=8
+        - XA=true
+        - REPLICATION=Y
+        - COVERAGE=Y
+        - MCENTRAL=Y
+        - JDOC=Y
+    - jdk: oraclejdk8
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      sudo: required
+      addons:
+        postgresql: "9.5"
+      env:
+        - PG_VERSION=9.5
+        - XA=true
+        - REPLICATION=Y
+        - JDK=8
+    - jdk: oraclejdk8
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      addons:
+        postgresql: "9.4"
+      env:
+        - PG_VERSION=9.4
+        - QUERY_MODE=extendedCacheEverything
+        - COVERAGE=Y
+        - TZ=Europe/Moscow # +03:00, no DST
+        - JDK=8
+    - jdk: oraclejdk8
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      sudo: required
+      addons:
+        postgresql: "10"
+      env:
+        - PG_VERSION=10
+        - SSLTEST=Y
+        - COVERAGE=Y
+        - JDK=8
+    - jdk: oraclejdk8
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      sudo: required
+      env:
+        - PG_VERSION=8.4
+        - XA=true
+        - COVERAGE=Y
+        - NO_HSTORE=Y
+        - CREATE_PLPGSQL=Y
+    - jdk: oraclejdk8
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      addons:
+        postgresql: "9.6"
+      env:
+        - PG_VERSION=9.6
+        - QUERY_MODE=simple
+        - COVERAGE=Y
+        - TEST_CLIENTS=Y
+        - JDK=8
+    - jdk: oraclejdk8
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
+      addons:
+        postgresql: "9.3"
+      env:
+        - PG_VERSION=9.3
+        - QUERY_MODE=extendedForPrepared
+        - COVERAGE=Y
+        - JDK=8
+    - jdk: oraclejdk8
+      arch: arm64-graviton2
+      virt: lxd
+      group: edge
       addons:
         postgresql: "9.4"
       env:
