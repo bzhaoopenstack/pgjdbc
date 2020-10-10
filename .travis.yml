@@ -242,8 +242,6 @@ matrix:
         - JDK=8
     - stage: test
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       env:
         - FEDORA_CI=Y
       services:
@@ -251,8 +249,6 @@ matrix:
       if: type != pull_request
     - jdk: openjdk-ea
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       sudo: required
       addons:
         postgresql: "10"
@@ -263,8 +259,6 @@ matrix:
         - BUILD_SCAN=Y
     - jdk: openjdk-ea
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       sudo: required
       addons:
         postgresql: "11"
@@ -276,8 +270,6 @@ matrix:
         - PLPGSQL_EXTENSION=Y
     - jdk: oraclejdk14
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       sudo: required
       addons:
         postgresql: "11"
@@ -290,8 +282,6 @@ matrix:
         - JDK=14
     - jdk: oraclejdk8
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       sudo: required
       addons:
         postgresql: "11"
@@ -305,8 +295,6 @@ matrix:
         - BUILD_SCAN=Y
     - jdk: oraclejdk11
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       sudo: required
       addons:
         postgresql: "10"
@@ -317,8 +305,6 @@ matrix:
         - SLOW_TESTS=Y
     - jdk: oraclejdk14
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       addons:
         postgresql: "9.6"
       env:
@@ -327,8 +313,6 @@ matrix:
         - TZ=America/New_York # flips between −05:00 and −04:00
     - jdk: oraclejdk8
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       sudo: required
       env:
         - PG_VERSION=HEAD
@@ -341,8 +325,6 @@ matrix:
         - SLOW_TESTS=Y
     - jdk: oraclejdk8
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       sudo: required
       addons:
         postgresql: "9.6"
@@ -356,8 +338,6 @@ matrix:
         - JDOC=Y
     - jdk: oraclejdk8
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       sudo: required
       addons:
         postgresql: "9.5"
@@ -368,8 +348,6 @@ matrix:
         - JDK=8
     - jdk: oraclejdk8
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       addons:
         postgresql: "9.4"
       env:
@@ -380,8 +358,6 @@ matrix:
         - JDK=8
     - jdk: oraclejdk8
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       sudo: required
       addons:
         postgresql: "10"
@@ -392,19 +368,15 @@ matrix:
         - JDK=8
     - jdk: oraclejdk8
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       sudo: required
       env:
         - PG_VERSION=8.4
-        - XA=true
+        - XA=truechrome-extension://jmpepeebcbihafjjadogphmbgiffiajh/images/logo_64.png
         - COVERAGE=Y
         - NO_HSTORE=Y
         - CREATE_PLPGSQL=Y
     - jdk: oraclejdk8
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       addons:
         postgresql: "9.6"
       env:
@@ -415,8 +387,6 @@ matrix:
         - JDK=8
     - jdk: oraclejdk8
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       addons:
         postgresql: "9.3"
       env:
@@ -426,8 +396,6 @@ matrix:
         - JDK=8
     - jdk: oraclejdk8
       arch: arm64-graviton2
-      virt: lxd
-      group: edge
       addons:
         postgresql: "9.4"
       env:
