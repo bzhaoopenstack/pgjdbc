@@ -240,13 +240,6 @@ matrix:
         - PG_VERSION=9.4
         - NO_WAFFLE_NO_OSGI=Y
         - JDK=8
-    - stage: test
-      arch: arm64-graviton2
-      env:
-        - FEDORA_CI=Y
-      services:
-        - docker
-      if: type != pull_request
     - jdk: openjdk-ea
       arch: arm64-graviton2
       sudo: required
