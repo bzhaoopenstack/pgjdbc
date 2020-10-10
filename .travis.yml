@@ -371,7 +371,7 @@ matrix:
       sudo: required
       env:
         - PG_VERSION=8.4
-        - XA=truechrome-extension://jmpepeebcbihafjjadogphmbgiffiajh/images/logo_64.png
+        - XA=true
         - COVERAGE=Y
         - NO_HSTORE=Y
         - CREATE_PLPGSQL=Y
