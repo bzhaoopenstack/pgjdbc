@@ -14,7 +14,7 @@ on:
 jobs:
   ubuntu-code-style:
     name: 'Ubuntu, code style (JDK 8)'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v2
       with:
@@ -34,7 +34,7 @@ jobs:
 
   ubuntu-latest:
     name: 'Ubuntu, PG latest (JDK 8)'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 # Service must be started after checkout, because we want to use git-stored files for initialization
 # of the Docker container. So we start it with and explicit docker ... command
 #    services:
@@ -83,7 +83,7 @@ jobs:
 
   linux-checkerframework:
     name: 'CheckerFramework (JDK 11)'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
         with:
@@ -103,7 +103,7 @@ jobs:
 
   gss-encryption:
     name: 'Ubuntu, gss encryption (JDK 8)'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - uses: actions/checkout@v2
