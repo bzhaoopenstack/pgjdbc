@@ -265,7 +265,6 @@ matrix:
       env:
         - PG_VERSION=11
         - XA=true
-        - COVERAGE=Y
         - NO_HSTORE=Y
         - PLPGSQL_EXTENSION=Y
     - jdk: oraclejdk14
@@ -278,7 +277,6 @@ matrix:
       env:
         - PG_VERSION=11
         - XA=true
-        - COVERAGE=Y
         - NO_HSTORE=Y
         - PLPGSQL_EXTENSION=Y
         - JDK=14
@@ -292,7 +290,6 @@ matrix:
       env:
         - PG_VERSION=11
         - XA=true
-        - COVERAGE=Y
         - NO_HSTORE=Y
         - PLPGSQL_EXTENSION=Y
         - JDK=8
@@ -328,7 +325,6 @@ matrix:
         - PG_VERSION=HEAD
         - XA=true
         - REPLICATION=Y
-        - COVERAGE=Y
         - TEST_CLIENTS=Y
         - TZ=Pacific/Chatham # flips between +12:45 and +13:45
         - JDK=8
@@ -345,7 +341,6 @@ matrix:
         - ZULU_JDK=8
         - XA=true
         - REPLICATION=Y
-        - COVERAGE=Y
         - MCENTRAL=Y
         - JDOC=Y
     - jdk: oraclejdk8
@@ -369,7 +364,6 @@ matrix:
       env:
         - PG_VERSION=9.4
         - QUERY_MODE=extendedCacheEverything
-        - COVERAGE=Y
         - TZ=Europe/Moscow # +03:00, no DST
         - JDK=8
     - jdk: oraclejdk8
@@ -382,7 +376,6 @@ matrix:
       env:
         - PG_VERSION=10
         - SSLTEST=Y
-        - COVERAGE=Y
         - JDK=8
     - jdk: oraclejdk8
       arch: arm64-graviton2
@@ -392,7 +385,6 @@ matrix:
       env:
         - PG_VERSION=8.4
         - XA=true
-        - COVERAGE=Y
         - NO_HSTORE=Y
         - CREATE_PLPGSQL=Y
     - jdk: oraclejdk8
@@ -404,7 +396,6 @@ matrix:
       env:
         - PG_VERSION=9.6
         - QUERY_MODE=simple
-        - COVERAGE=Y
         - TEST_CLIENTS=Y
         - JDK=8
     - jdk: oraclejdk8
@@ -416,7 +407,6 @@ matrix:
       env:
         - PG_VERSION=9.3
         - QUERY_MODE=extendedForPrepared
-        - COVERAGE=Y
         - JDK=8
     - jdk: oraclejdk8
       arch: arm64-graviton2
