@@ -9,18 +9,12 @@ jobs:
   ubuntu-code-style:
     strategy:
       matrix:
-          arch: [aarch64, x86]
-          os: [ubuntu, macos, windows]
+          os: [ubuntu]
           jdk: [8, 11]
 
-    name: '${{ matrix.arch }}, ${{ matrix.os }}, ${{ matrix.jdk }} seed build cache'
-    runs-on: ${{ matrix.os }}-latest
+    name: '${{ matrix.os }}, ${{ matrix.jdk }} seed build cache'
+    runs-on: self-hosted
     steps:
-      - uses: uraimo/run-on-arch-action@v2.0.5
-        name: collect ENV info
-        with:
-          arch: ${{ matrix.arch }}
-          run: uname -a
       - uses: actions/checkout@v2
         with:
           fetch-depth: 50
