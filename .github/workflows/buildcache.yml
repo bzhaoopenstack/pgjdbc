@@ -17,8 +17,10 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: uraimo/run-on-arch-action@v2.0.5
+        name: collect ENV info
         with:
           arch: ${{ matrix.arch }}
+          run: uname -a
       - uses: actions/checkout@v2
         with:
           fetch-depth: 50
