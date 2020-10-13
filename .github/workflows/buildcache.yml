@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 50
       - name: 'Set up JDK ${{ matrix.jdk }}'
-        uses: bzhaoopenstack/setup-java@v9
+        uses: bzhaoopenstack/setup-java@v10
         with:
           java-version: ${{ matrix.jdk }}
           architecture: aarch64
