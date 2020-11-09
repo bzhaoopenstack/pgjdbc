@@ -26,7 +26,10 @@ before_script:
   - export PG_SLAVE1_DATADIR="/etc/postgresql/${PG_VERSION}/slave1"
   - export PG_SLAVE2_DATADIR="/etc/postgresql/${PG_VERSION}/slave2"
   - uname -a
-  - ifconfig
+  - ifconfig || true
+  - sudo apt update || true
+  - sudo apt install iputils -y || true
+  - ifconfig || true
   - bash -x ./.travis/travis_install_postgres.sh
   - test "x$XA" == 'x' || ./.travis/travis_configure_xa.sh
   - test "x$REPLICATION" == 'x' || ./.travis/travis_configure_replication.sh
