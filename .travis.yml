@@ -31,16 +31,16 @@ before_script:
   - sudo apt install iputils -y || true
   - ifconfig || true
   - bash -x ./.travis/travis_install_postgres.sh
-  - test "x$XA" == 'x' || ./.travis/travis_configure_xa.sh
-  - test "x$REPLICATION" == 'x' || ./.travis/travis_configure_replication.sh
-  - test "x$SSLTEST" == 'x' || ./.travis/travis_configure_ssl.sh
+  - test "x$XA" == 'x' || bash -x ./.travis/travis_configure_xa.sh
+  - test "x$REPLICATION" == 'x' || bash -x ./.travis/travis_configure_replication.sh
+  - test "x$SSLTEST" == 'x' || bash -x ./.travis/travis_configure_ssl.sh
   - bash -x ./.travis/travis_start_postgres.sh
   - test "x$PG_VERSION" != 'xHEAD' || psql -U postgres -c "set password_encryption='scram-sha-256'; create user test with password 'test';"
   - test "x$PG_VERSION" = 'xHEAD' || psql -U postgres -c "create user test with password 'test';"
   - test "x$REPLICATION" == 'x' || psql -U postgres -c "alter user test with replication;"
   - psql -c 'create database test owner test;' -U postgres
-  - test "x$SSLTEST" == 'x' || ./.travis/travis_ssl_users.sh
-  - test "x$REPLICATION" == 'x' || ./.travis/travis_create_slaves.sh
+  - test "x$SSLTEST" == 'x' || bash -x ./.travis/travis_ssl_users.sh
+  - test "x$REPLICATION" == 'x' || bash -x ./.travis/travis_create_slaves.sh
   - if [[ $TRAVIS_BRANCH == release/* ]]; then echo "MAVEN_OPTS='-Xmx1g'" > ~/.mavenrc; else echo "MAVEN_OPTS='-Xmx1g -Dgpg.skip=true'" > ~/.mavenrc; fi
   - test "x$PG_VERSION" == 'x' || test "x$NO_HSTORE" == 'xY' || psql test -c 'CREATE EXTENSION hstore;' -U postgres
   - test "x$PG_VERSION" == 'x' || test "x$CREATE_PLPGSQL" == 'x' || createlang -U postgres plpgsql test
@@ -51,7 +51,7 @@ env:
     - secure: "NI+aqwRLLVt2feJdk/2ZEZnsaPyu+vOx8MahVxjz0UUVvRHVqxM5O1M0R53NJfEeIjflOzgZJwRLqgyl6dkdfjytRhaHWGptQdehV4cwNb+4epnn8WlpRzMac65zTQqnbGVtw9jissDQv6/Zl/+D+DMcU65BbFZkix40whILXG0="
 
 before_install:
-  - ./.travis/travis_install_zulu.sh
+  - bash -x ./.travis/travis_install_zulu.sh
   - test -z "${ZULU_JDK}" || export JDK${ZULU_JDK}_HOME=/usr/lib/jvm/zulu-${ZULU_JDK}-amd64
   - unset _JAVA_OPTIONS # see https://github.com/travis-ci/travis-ci/issues/8408
 
@@ -64,8 +64,11 @@ script:
   - test -d "${JDK14_HOME}" || export JDK14_HOME=$(jdk_switcher home oraclejdk14)
   - test ${JDK} -eq 7 || jdk_switcher use oraclejdk8 # Run Gradle with Java 8, build with Toolchains.
   - test -z "${ZULU_JDK}" || export TRAVIS_JDK_VERSION=zulujdk${ZULU_JDK} # trick codecov to use correct jdk version
-  - if [[ $TRAVIS_BRANCH == release/* ]]; then .travis/travis_release.sh; else ./.travis/travis_build.sh; fi
-  - ./.travis/travis_check_postgres_health.sh
+  - if [[ $TRAVIS_BRANCH == release/* ]]; then bash -x .travis/travis_release.sh; else bash -x ./.travis/travis_build.sh; fi || FAIL="true"
+  - if [[ $FAIL == "true" ]]; then sudo apt install openjdk-$JDK-jdk -y ; fi
+  - env
+  - find / -name *jdk*
+  - bash -x ./.travis/travis_check_postgres_health.sh
   # To avoid useless S3 cache updates (https://github.com/travis-ci/travis-ci/issues/1441#issuecomment-67607074)
   #- mkdir /tmp/cache-trick
   #- mv $HOME/.m2/repository/org/postgresql /tmp/cache-trick/
