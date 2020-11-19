@@ -1,6 +1,6 @@
 sudo: false
 language: java
-dist: trusty
+dist: bionic
 
 branches:
   except:
@@ -25,17 +25,17 @@ before_script:
   - export PG_DATADIR="/etc/postgresql/${PG_VERSION}/main"
   - export PG_SLAVE1_DATADIR="/etc/postgresql/${PG_VERSION}/slave1"
   - export PG_SLAVE2_DATADIR="/etc/postgresql/${PG_VERSION}/slave2"
-  -  ./.travis/travis_install_postgres.sh
-  - test "x$XA" == 'x' || ./.travis/travis_configure_xa.sh
-  - test "x$REPLICATION" == 'x' || ./.travis/travis_configure_replication.sh
-  - test "x$SSLTEST" == 'x' || ./.travis/travis_configure_ssl.sh
-  - ./.travis/travis_start_postgres.sh
+  - bash -x ./.travis/travis_install_postgres.sh
+  - test "x$XA" == 'x' || bash -x ./.travis/travis_configure_xa.sh
+  - test "x$REPLICATION" == 'x' || bash -x ./.travis/travis_configure_replication.sh
+  - test "x$SSLTEST" == 'x' || bash -x ./.travis/travis_configure_ssl.sh
+  - bash -x ./.travis/travis_start_postgres.sh
   - test "x$PG_VERSION" != 'xHEAD' || psql -U postgres -c "set password_encryption='scram-sha-256'; create user test with password 'test';"
   - test "x$PG_VERSION" = 'xHEAD' || psql -U postgres -c "create user test with password 'test';"
   - test "x$REPLICATION" == 'x' || psql -U postgres -c "alter user test with replication;"
   - psql -c 'create database test owner test;' -U postgres
-  - test "x$SSLTEST" == 'x' || ./.travis/travis_ssl_users.sh
-  - test "x$REPLICATION" == 'x' || ./.travis/travis_create_slaves.sh
+  - test "x$SSLTEST" == 'x' || bash -x ./.travis/travis_ssl_users.sh
+  - test "x$REPLICATION" == 'x' || bash -x ./.travis/travis_create_slaves.sh
   - if [[ $TRAVIS_BRANCH == release/* ]]; then echo "MAVEN_OPTS='-Xmx1g'" > ~/.mavenrc; else echo "MAVEN_OPTS='-Xmx1g -Dgpg.skip=true'" > ~/.mavenrc; fi
   - test "x$PG_VERSION" == 'x' || test "x$NO_HSTORE" == 'xY' || psql test -c 'CREATE EXTENSION hstore;' -U postgres
   - test "x$PG_VERSION" == 'x' || test "x$CREATE_PLPGSQL" == 'x' || createlang -U postgres plpgsql test
@@ -46,21 +46,20 @@ env:
     - secure: "NI+aqwRLLVt2feJdk/2ZEZnsaPyu+vOx8MahVxjz0UUVvRHVqxM5O1M0R53NJfEeIjflOzgZJwRLqgyl6dkdfjytRhaHWGptQdehV4cwNb+4epnn8WlpRzMac65zTQqnbGVtw9jissDQv6/Zl/+D+DMcU65BbFZkix40whILXG0="
 
 before_install:
-  - ./.travis/travis_install_zulu.sh
+  - bash -x ./.travis/travis_install_zulu.sh
   - test -z "${ZULU_JDK}" || export JDK${ZULU_JDK}_HOME=/usr/lib/jvm/zulu-${ZULU_JDK}-amd64
   - unset _JAVA_OPTIONS # see https://github.com/travis-ci/travis-ci/issues/8408
 
 script:
-  - wget https://raw.githubusercontent.com/michaelklishin/jdk_switcher/master/jdk_switcher.sh
-  - source ./jdk_switcher.sh
+  - if [[ $TRAVIS_CPU_ARCH =~ arm64* ]]; then wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ; chmod +x ./install-jdk.sh ; export JAVA_HOME=$(./install-jdk.sh -o linux-aarch64 --feature $JDK -e | tail -1) ; export PATH=$PATH:$JAVA_HOME/bin; java --version ;fi
   # make sure previous build artifacts are not used for subsequent builds
   - rm -rf $HOME/.m2/repository/org/postgresql || true
   - test -d "${JDK8_HOME}" || export JDK8_HOME=$(jdk_switcher home oraclejdk8)
   - test -d "${JDK14_HOME}" || export JDK14_HOME=$(jdk_switcher home oraclejdk14)
   - test ${JDK} -eq 7 || jdk_switcher use oraclejdk8 # Run Gradle with Java 8, build with Toolchains.
   - test -z "${ZULU_JDK}" || export TRAVIS_JDK_VERSION=zulujdk${ZULU_JDK} # trick codecov to use correct jdk version
-  - if [[ $TRAVIS_BRANCH == release/* ]]; then .travis/travis_release.sh; else ./.travis/travis_build.sh; fi
-  - ./.travis/travis_check_postgres_health.sh
+  - if [[ $TRAVIS_BRANCH == release/* ]]; then bash -x .travis/travis_release.sh; else bash -x ./.travis/travis_build.sh; fi
+  - bash -x ./.travis/travis_check_postgres_health.sh
   # To avoid useless S3 cache updates (https://github.com/travis-ci/travis-ci/issues/1441#issuecomment-67607074)
   #- mkdir /tmp/cache-trick
   #- mv $HOME/.m2/repository/org/postgresql /tmp/cache-trick/
@@ -113,127 +112,6 @@ matrix:
         - COVERAGE=Y
         - NO_HSTORE=Y
         - PLPGSQL_EXTENSION=Y
-    - jdk: oraclejdk14
-      sudo: required
-      addons:
-        postgresql: "11"
-      env:
-        - PG_VERSION=11
-        - XA=true
-        - COVERAGE=Y
-        - NO_HSTORE=Y
-        - PLPGSQL_EXTENSION=Y
-        - JDK=14
-    - jdk: oraclejdk8
-      sudo: required
-      addons:
-        postgresql: "11"
-      env:
-        - PG_VERSION=11
-        - XA=true
-        - COVERAGE=Y
-        - NO_HSTORE=Y
-        - PLPGSQL_EXTENSION=Y
-        - JDK=8
-        - BUILD_SCAN=Y
-    - jdk: oraclejdk11
-      sudo: required
-      addons:
-        postgresql: "10"
-      env:
-        - PG_VERSION=10
-        - JDK=11
-        - TZ=America/New_York # flips between −05:00 and −04:00
-        - SLOW_TESTS=Y
-    - jdk: oraclejdk14
-      addons:
-        postgresql: "9.6"
-      env:
-        - PG_VERSION=9.6
-        - JDK=14
-        - TZ=America/New_York # flips between −05:00 and −04:00
-    - jdk: oraclejdk8
-      sudo: required
-      env:
-        - PG_VERSION=HEAD
-        - XA=true
-        - REPLICATION=Y
-        - COVERAGE=Y
-        - TEST_CLIENTS=Y
-        - TZ=Pacific/Chatham # flips between +12:45 and +13:45
-        - JDK=8
-        - SLOW_TESTS=Y
-    - jdk: oraclejdk8
-      sudo: required
-      addons:
-        postgresql: "9.6"
-      env:
-        - PG_VERSION=9.6
-        - ZULU_JDK=8
-        - XA=true
-        - REPLICATION=Y
-        - COVERAGE=Y
-        - MCENTRAL=Y
-        - JDOC=Y
-    - jdk: oraclejdk8
-      sudo: required
-      addons:
-        postgresql: "9.5"
-      env:
-        - PG_VERSION=9.5
-        - XA=true
-        - REPLICATION=Y
-        - JDK=8
-    - jdk: oraclejdk8
-      addons:
-        postgresql: "9.4"
-      env:
-        - PG_VERSION=9.4
-        - QUERY_MODE=extendedCacheEverything
-        - COVERAGE=Y
-        - TZ=Europe/Moscow # +03:00, no DST
-        - JDK=8
-    - jdk: oraclejdk8
-      sudo: required
-      addons:
-        postgresql: "10"
-      env:
-        - PG_VERSION=10
-        - SSLTEST=Y
-        - COVERAGE=Y
-        - JDK=8
-    - jdk: oraclejdk8
-      sudo: required
-      env:
-        - PG_VERSION=8.4
-        - XA=true
-        - COVERAGE=Y
-        - NO_HSTORE=Y
-        - CREATE_PLPGSQL=Y
-    - jdk: oraclejdk8
-      addons:
-        postgresql: "9.6"
-      env:
-        - PG_VERSION=9.6
-        - QUERY_MODE=simple
-        - COVERAGE=Y
-        - TEST_CLIENTS=Y
-        - JDK=8
-    - jdk: oraclejdk8
-      addons:
-        postgresql: "9.3"
-      env:
-        - PG_VERSION=9.3
-        - QUERY_MODE=extendedForPrepared
-        - COVERAGE=Y
-        - JDK=8
-    - jdk: oraclejdk8
-      addons:
-        postgresql: "9.4"
-      env:
-        - PG_VERSION=9.4
-        - NO_WAFFLE_NO_OSGI=Y
-        - JDK=8
     - stage: test
       arch: arm64-graviton2
       virt: lxd
@@ -249,175 +127,13 @@ matrix:
       group: edge
       sudo: required
       addons:
-        postgresql: "10"
+        postgresql: "13"
       env:
-        - PG_VERSION=10
-        - JDK=12
+        - PG_VERSION=13
+        - JDK=15
         - TZ=America/New_York # flips between −05:00 and −04:00
         - BUILD_SCAN=Y
-    - jdk: openjdk-ea
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      sudo: required
-      addons:
-        postgresql: "11"
-      env:
-        - PG_VERSION=11
-        - XA=true
-        - NO_HSTORE=Y
-        - PLPGSQL_EXTENSION=Y
-    - jdk: oraclejdk14
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      sudo: required
-      addons:
-        postgresql: "11"
-      env:
-        - PG_VERSION=11
-        - XA=true
-        - NO_HSTORE=Y
-        - PLPGSQL_EXTENSION=Y
-        - JDK=14
-    - jdk: oraclejdk8
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      sudo: required
-      addons:
-        postgresql: "11"
-      env:
-        - PG_VERSION=11
-        - XA=true
-        - NO_HSTORE=Y
-        - PLPGSQL_EXTENSION=Y
-        - JDK=8
-        - BUILD_SCAN=Y
-    - jdk: oraclejdk11
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      sudo: required
-      addons:
-        postgresql: "10"
-      env:
-        - PG_VERSION=10
-        - JDK=11
-        - TZ=America/New_York # flips between −05:00 and −04:00
-        - SLOW_TESTS=Y
-    - jdk: oraclejdk14
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      addons:
-        postgresql: "9.6"
-      env:
-        - PG_VERSION=9.6
-        - JDK=14
-        - TZ=America/New_York # flips between −05:00 and −04:00
-    - jdk: oraclejdk8
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      sudo: required
-      env:
-        - PG_VERSION=HEAD
-        - XA=true
-        - REPLICATION=Y
-        - TEST_CLIENTS=Y
-        - TZ=Pacific/Chatham # flips between +12:45 and +13:45
-        - JDK=8
-        - SLOW_TESTS=Y
-    - jdk: oraclejdk8
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      sudo: required
-      addons:
-        postgresql: "9.6"
-      env:
-        - PG_VERSION=9.6
-        - ZULU_JDK=8
-        - XA=true
-        - REPLICATION=Y
-        - MCENTRAL=Y
-        - JDOC=Y
-    - jdk: oraclejdk8
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      sudo: required
-      addons:
-        postgresql: "9.5"
-      env:
-        - PG_VERSION=9.5
-        - XA=true
-        - REPLICATION=Y
-        - JDK=8
-    - jdk: oraclejdk8
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      addons:
-        postgresql: "9.4"
-      env:
-        - PG_VERSION=9.4
-        - QUERY_MODE=extendedCacheEverything
-        - TZ=Europe/Moscow # +03:00, no DST
-        - JDK=8
-    - jdk: oraclejdk8
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      sudo: required
-      addons:
-        postgresql: "10"
-      env:
-        - PG_VERSION=10
-        - SSLTEST=Y
-        - JDK=8
-    - jdk: oraclejdk8
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      sudo: required
-      env:
-        - PG_VERSION=8.4
-        - XA=true
-        - NO_HSTORE=Y
-        - CREATE_PLPGSQL=Y
-    - jdk: oraclejdk8
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      addons:
-        postgresql: "9.6"
-      env:
-        - PG_VERSION=9.6
-        - QUERY_MODE=simple
-        - TEST_CLIENTS=Y
-        - JDK=8
-    - jdk: oraclejdk8
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      addons:
-        postgresql: "9.3"
-      env:
-        - PG_VERSION=9.3
-        - QUERY_MODE=extendedForPrepared
-        - JDK=8
-    - jdk: oraclejdk8
-      arch: arm64-graviton2
-      virt: lxd
-      group: edge
-      addons:
-        postgresql: "9.4"
-      env:
-        - PG_VERSION=9.4
-        - NO_WAFFLE_NO_OSGI=Y
-        - JDK=8
+        - MVN_CUSTOM_ARGS="-PfailOnJavadocWarning=false"
 
 # Deploy snapshots to Maven Central
 after_success:
