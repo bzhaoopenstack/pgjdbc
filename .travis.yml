@@ -55,7 +55,8 @@ script:
   - rm -rf $HOME/.m2/repository/org/postgresql || true
   - test -d "${JDK8_HOME}" || export JDK8_HOME=$(jdk_switcher home oraclejdk8)
   - test -d "${JDK14_HOME}" || export JDK14_HOME=$(jdk_switcher home oraclejdk14)
-  - test ${JDK} -eq 7 || jdk_switcher use oraclejdk8 # Run Gradle with Java 8, build with Toolchains.
+  # Run Gradle with Java 8, build with Toolchains. And force to return 0 even no jdk_switcher cmd.
+  - test ${JDK} -eq 7 || jdk_switcher use oraclejdk8 || jdk_switcher --help || true
   - test -z "${ZULU_JDK}" || export TRAVIS_JDK_VERSION=zulujdk${ZULU_JDK} # trick codecov to use correct jdk version
   - if [[ $TRAVIS_BRANCH == release/* ]]; then bash -x .travis/travis_release.sh; else bash -x ./.travis/travis_build.sh; fi
   - bash -x ./.travis/travis_check_postgres_health.sh
