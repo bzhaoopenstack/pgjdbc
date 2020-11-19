@@ -115,7 +115,7 @@ matrix:
       services:
         - docker
       if: type != pull_request
-    - jdk: openjdk15
+    - jdk: openjdk13
       dist: bionic
       arch: arm64-graviton2
       virt: lxd
@@ -128,6 +128,64 @@ matrix:
         - JDK=15
         - TZ=America/New_York # flips between −05:00 and −04:00
         - BUILD_SCAN=Y
+        - MVN_CUSTOM_ARGS="-PfailOnJavadocWarning=false"
+    - stage: test
+      dist: bionic
+      arch: arm64
+      env:
+        - FEDORA_CI=Y
+      services:
+        - docker
+      if: type != pull_request
+    - jdk: openjdk15
+      dist: bionic
+      arch: arm64
+      sudo: required
+      addons:
+        postgresql: "13"
+      env:
+        - PG_VERSION=13
+        - JDK=15
+        - TZ=America/New_York # flips between −05:00 and −04:00
+        - BUILD_SCAN=Y
+        - MVN_CUSTOM_ARGS="-PfailOnJavadocWarning=false"
+    - jdk: openjdk15
+      dist: bionic
+      arch: arm64
+      sudo: required
+      addons:
+        postgresql: "13"
+      env:
+        - PG_VERSION=13
+        - JDK=ea
+        - XA=true
+        - NO_HSTORE=Y
+        - PLPGSQL_EXTENSION=Y
+        - MVN_CUSTOM_ARGS="-PfailOnJavadocWarning=false"
+    - jdk: openjdk-ea
+      dist: bionic
+      arch: arm64
+      sudo: required
+      addons:
+        postgresql: "HEAD"
+      env:
+        - PG_VERSION=HEAD
+        - JDK=ea
+        - TZ=America/New_York # flips between −05:00 and −04:00
+        - BUILD_SCAN=Y
+        - MVN_CUSTOM_ARGS="-PfailOnJavadocWarning=false"
+    - jdk: openjdk-ea
+      dist: bionic
+      arch: arm64
+      sudo: required
+      addons:
+        postgresql: "HEAD"
+      env:
+        - PG_VERSION=HEAD
+        - JDK=ea
+        - XA=true
+        - NO_HSTORE=Y
+        - PLPGSQL_EXTENSION=Y
         - MVN_CUSTOM_ARGS="-PfailOnJavadocWarning=false"
 
 # Deploy snapshots to Maven Central
