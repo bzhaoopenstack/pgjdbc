@@ -22,22 +22,18 @@ jobs:
     - name: 'Set up JDK 8 on ARM64'
       run: |
         env
-
-    - name: 'Set up JDK 8 on ARM64'
-      if: runner.os == 'Linux-aarch64'
-      run: |
-        env
-        wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ;
-        chmod +x ./install-jdk.sh ;
-        export JAVA_HOME=$(./install-jdk.sh -o linux-aarch64 --feature $JDK -e | tail -1) ;
-        export PATH=$PATH:$JAVA_HOME/bin;
-        java --version ;
-        uname -a
-        cat /etc/os-release
-        lscpu | grep -E "Architecture|Model name|CPU\(s\):"
+        if [[ `uname -i` == 'aarch64'  ]]; then
+            wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ;
+            chmod +x ./install-jdk.sh ;
+            export JAVA_HOME=$(./install-jdk.sh -o linux-aarch64 --feature $JDK -e | tail -1) ;
+            export PATH=$PATH:$JAVA_HOME/bin;
+            java --version ;
+        else
+            exit 1
+        fi
 
     - name: 'Set up JDK 8'
-      if: runner.os != 'Linux-aarch64'
+      if: ${{ failure() }}
       uses: actions/setup-java@v1
       with:
         java-version: 8
