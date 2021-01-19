@@ -20,6 +20,10 @@ jobs:
       with:
         fetch-depth: 50
     - name: 'Set up JDK 8 on ARM64'
+      run: |
+        env
+
+    - name: 'Set up JDK 8 on ARM64'
       if: runner.os == 'Linux-aarch64'
       run: |
         env
