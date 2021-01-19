@@ -22,6 +22,7 @@ jobs:
     - name: 'Set up JDK 8 on ARM64'
       run: |
         env
+        set -ex
         if [[ `uname -i` == 'aarch64'  ]]; then
             wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ;
             chmod +x ./install-jdk.sh ;
