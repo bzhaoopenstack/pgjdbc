@@ -38,8 +38,10 @@ jobs:
         export JAVA_HOME=$(./install-jdk.sh -o linux-aarch64 --feature 15 -e | tail -1) ;
         export PATH=$JAVA_HOME/bin:$PATH;
         java --version ;
+        # echo "::set-env name=JAVA_HOME_ARM64::${JAVA_HOME}"
         echo ${{ steps.get_arch_name.outputs.arch_name }};
-        echo "::set-output name=JAVA_HOME_ARM64::$(JAVA_HOME)"
+        echo "::set-output name=JAVA_HOME_ARM64::${JAVA_HOME}"
+        echo "::set-env name=PATH::${PATH}"
 
     - name: 'Set up JDK 8'
       if: ${{ steps.get_arch_name.outputs.arch_name != 'aarch64' }}
