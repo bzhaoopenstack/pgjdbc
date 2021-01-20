@@ -28,6 +28,7 @@ jobs:
       id: get_arch_name
 
     - name: 'Set up JDK 15 on ARM64'
+      id: setup_jdk_arm64
       if: ${{ steps.get_arch_name.outputs.arch_name == 'aarch64' }}
       run: |
         env
@@ -38,6 +39,7 @@ jobs:
         export PATH=$JAVA_HOME/bin:$PATH;
         java --version ;
         echo ${{ steps.get_arch_name.outputs.arch_name }};
+        echo "::set-output name=JAVA_HOME_ARM64::$(JAVA_HOME)"
 
     - name: 'Set up JDK 8'
       if: ${{ steps.get_arch_name.outputs.arch_name != 'aarch64' }}
@@ -49,6 +51,7 @@ jobs:
       env:
         S3_BUILD_CACHE_ACCESS_KEY_ID: ${{ secrets.S3_BUILD_CACHE_ACCESS_KEY_ID }}
         S3_BUILD_CACHE_SECRET_KEY: ${{ secrets.S3_BUILD_CACHE_SECRET_KEY }}
+        JAVA_HOME: ${{ steps.setup_jdk_arm64.outputs.JAVA_HOME_ARM64 }}
       with:
         job-id: jdk15
         arguments: autostyleCheck checkstyleAll
