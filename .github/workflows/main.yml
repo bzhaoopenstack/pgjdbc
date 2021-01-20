@@ -32,7 +32,7 @@ jobs:
         wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ;
         chmod +x ./install-jdk.sh ;
         export JAVA_HOME=$(./install-jdk.sh -o linux-aarch64 --feature 15 -e | tail -1) ;
-        export PATH=$PATH:$JAVA_HOME/bin;
+        export PATH=$JAVA_HOME/bin:$PATH;
         java --version ;
 
     - name: 'Set up JDK 8'
