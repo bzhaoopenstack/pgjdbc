@@ -135,6 +135,10 @@ jobs:
   linux-checkerframework:
     name: 'CheckerFramework (JDK 11)'
     runs-on: self-hosted
+    env:
+      ACTIONS_STEP_DEBUG: true
+      ACTIONS_RUNNER_DEBUG: true
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -175,6 +179,10 @@ jobs:
   gss-encryption:
     name: 'Ubuntu, gss encryption (JDK 8)'
     runs-on: self-hosted
+    env:
+      ACTIONS_STEP_DEBUG: true
+      ACTIONS_RUNNER_DEBUG: true
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
     steps:
     - uses: actions/checkout@v2
