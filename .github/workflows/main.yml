@@ -34,9 +34,9 @@ jobs:
       run: |
         env
         set -ex
-		sudo apt update
-		sudo apt install openjdk-8-jdk -y
-		export JAVA_HOME=$(dirname $(update-alternatives --list javac)) ;
+        sudo apt update
+        sudo apt install openjdk-8-jdk -y
+        export JAVA_HOME=$(dirname $(update-alternatives --list javac)) ;
         export PATH=$JAVA_HOME/bin:$PATH;	
         #wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ;
         #chmod +x ./install-jdk.sh ;
@@ -66,7 +66,7 @@ jobs:
   ubuntu-latest:
     name: 'Ubuntu, PG latest (JDK ${{ matrix.jdk }})'
     runs-on: self-hosted
-	env:
+    env:
       ACTIONS_STEP_DEBUG: true
       ACTIONS_RUNNER_DEBUG: true
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
@@ -112,9 +112,9 @@ jobs:
       run: |
         env
         set -ex
-		sudo apt update
-		sudo apt install openjdk-${{ matrix.jdk }}-jdk -y
-		export JAVA_HOME=$(dirname $(update-alternatives --list javac)) ;
+        sudo apt update
+        sudo apt install openjdk-${{ matrix.jdk }}-jdk -y
+        export JAVA_HOME=$(dirname $(update-alternatives --list javac)) ;
         export PATH=$JAVA_HOME/bin:$PATH;	
         #wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ;
         #chmod +x ./install-jdk.sh ;
@@ -127,7 +127,7 @@ jobs:
         echo "::set-env name=PATH::${PATH}"
     - name: 'Set up JDK ${{ matrix.jdk }}'
       uses: actions/setup-java@v1
-	  if: ${{ steps.get_arch_name.outputs.arch_name != 'aarch64' }}
+      if: ${{ steps.get_arch_name.outputs.arch_name != 'aarch64' }}
       with:
         java-version: ${{ matrix.jdk }}
     - name: Prepare ssltest.local.properties
@@ -165,9 +165,9 @@ jobs:
         run: |
           env
           set -ex
-		  sudo apt update
-		  sudo apt install openjdk-11-jdk -y
-		  export JAVA_HOME=$(dirname $(update-alternatives --list javac)) ;
+          sudo apt update
+          sudo apt install openjdk-11-jdk -y
+          export JAVA_HOME=$(dirname $(update-alternatives --list javac)) ;
           export PATH=$JAVA_HOME/bin:$PATH;	
           #wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ;
           #chmod +x ./install-jdk.sh ;
@@ -212,9 +212,9 @@ jobs:
       run: |
         env
         set -ex
-		sudo apt update
-		sudo apt install openjdk-8-jdk -y
-		export JAVA_HOME=$(dirname $(update-alternatives --list javac)) ;
+        sudo apt update
+        sudo apt install openjdk-8-jdk -y
+        export JAVA_HOME=$(dirname $(update-alternatives --list javac)) ;
         export PATH=$JAVA_HOME/bin:$PATH;	
         #wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ;
         #chmod +x ./install-jdk.sh ;
