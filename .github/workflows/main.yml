@@ -36,7 +36,7 @@ jobs:
         set -ex
         sudo apt update
         sudo apt install openjdk-8-jdk -y
-        export JAVA_HOME=$(dirname $(update-alternatives --list javac)) ;
+        export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-arm64/ ;
         export PATH=$JAVA_HOME/bin:$PATH;	
         #wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ;
         #chmod +x ./install-jdk.sh ;
@@ -114,7 +114,7 @@ jobs:
         set -ex
         sudo apt update
         sudo apt install openjdk-${{ matrix.jdk }}-jdk -y
-        export JAVA_HOME=$(dirname $(update-alternatives --list javac)) ;
+        export JAVA_HOME=/usr/lib/jvm/java-${{ matrix.jdk }}-openjdk-arm64/ ;
         export PATH=$JAVA_HOME/bin:$PATH;	
         #wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ;
         #chmod +x ./install-jdk.sh ;
@@ -167,7 +167,7 @@ jobs:
           set -ex
           sudo apt update
           sudo apt install openjdk-11-jdk -y
-          export JAVA_HOME=$(dirname $(update-alternatives --list javac)) ;
+          export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64/ ;
           export PATH=$JAVA_HOME/bin:$PATH;	
           #wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ;
           #chmod +x ./install-jdk.sh ;
@@ -214,7 +214,7 @@ jobs:
         set -ex
         sudo apt update
         sudo apt install openjdk-8-jdk -y
-        export JAVA_HOME=$(dirname $(update-alternatives --list javac)) ;
+        export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-arm64/ ;
         export PATH=$JAVA_HOME/bin:$PATH;	
         #wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ;
         #chmod +x ./install-jdk.sh ;
