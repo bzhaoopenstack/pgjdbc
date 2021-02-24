@@ -51,11 +51,13 @@ before_install:
   - unset _JAVA_OPTIONS # see https://github.com/travis-ci/travis-ci/issues/8408
 
 script:
+  - if [[ $TRAVIS_CPU_ARCH =~ arm64* ]]; then wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh ; chmod +x ./install-jdk.sh ; export JAVA_HOME=$(./install-jdk.sh -o linux-aarch64 --feature $JDK -e | tail -1) ; export PATH=$PATH:$JAVA_HOME/bin; java --version ;fi
   # make sure previous build artifacts are not used for subsequent builds
   - rm -rf $HOME/.m2/repository/org/postgresql || true
   - test -d "${JDK8_HOME}" || export JDK8_HOME=$(jdk_switcher home oraclejdk8)
   - test -d "${JDK14_HOME}" || export JDK14_HOME=$(jdk_switcher home oraclejdk14)
-  - test ${JDK} -eq 7 || jdk_switcher use oraclejdk8 # Run Gradle with Java 8, build with Toolchains.
+  # Run Gradle with Java 8, build with Toolchains. And force to return 0 even no jdk_switcher cmd.
+  - test ${JDK} -eq 7 || jdk_switcher use oraclejdk8 || jdk_switcher --help || true
   - test -z "${ZULU_JDK}" || export TRAVIS_JDK_VERSION=zulujdk${ZULU_JDK} # trick codecov to use correct jdk version
   - if [[ $TRAVIS_BRANCH == release/* ]]; then .travis/travis_release.sh; else ./.travis/travis_build.sh; fi
   - ./.travis/travis_check_postgres_health.sh
@@ -232,6 +234,56 @@ matrix:
         - PG_VERSION=9.4
         - NO_WAFFLE_NO_OSGI=Y
         - JDK=8
+    - jdk: openjdk15
+      dist: bionic
+      arch: arm64
+      sudo: required
+      addons:
+        postgresql: "13"
+      env:
+        - PG_VERSION=13
+        - JDK=15
+        - TZ=America/New_York # flips between −05:00 and −04:00
+        - BUILD_SCAN=Y
+        - MVN_CUSTOM_ARGS="-PfailOnJavadocWarning=false"
+    - jdk: openjdk15
+      dist: bionic
+      arch: arm64
+      sudo: required
+      addons:
+        postgresql: "13"
+      env:
+        - PG_VERSION=13
+        - JDK=ea
+        - XA=true
+        - NO_HSTORE=Y
+        - PLPGSQL_EXTENSION=Y
+        - MVN_CUSTOM_ARGS="-PfailOnJavadocWarning=false"
+    - jdk: openjdk-ea
+      dist: bionic
+      arch: arm64
+      sudo: required
+      addons:
+        postgresql: "HEAD"
+      env:
+        - PG_VERSION=HEAD
+        - JDK=ea
+        - TZ=America/New_York # flips between −05:00 and −04:00
+        - BUILD_SCAN=Y
+        - MVN_CUSTOM_ARGS="-PfailOnJavadocWarning=false"
+    - jdk: openjdk-ea
+      dist: bionic
+      arch: arm64
+      sudo: required
+      addons:
+        postgresql: "HEAD"
+      env:
+        - PG_VERSION=HEAD
+        - JDK=ea
+        - XA=true
+        - NO_HSTORE=Y
+        - PLPGSQL_EXTENSION=Y
+        - MVN_CUSTOM_ARGS="-PfailOnJavadocWarning=false"
 
 # Deploy snapshots to Maven Central
 after_success:
